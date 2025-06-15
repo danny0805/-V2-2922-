@@ -1,5 +1,4 @@
-// ¾ß¿ËÀÌ¿Í ¼öÇÁ v2 - C ¹öÀü (scanf_s Àû¿ë ¹× ³Î Á¾·á º¸Àå)
-// ÄÄÆÄÀÏ (MSVC ±âÁØ): cl yaongi_soup_game.c
+// ì•¼ì˜¹ì´ì™€ ìˆ˜í”„ v2
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,18 +31,18 @@ int main() {
     int hasLaser = 0;
 
     for (turn = 1; turn <= 10; turn++) {
-        printf("\n========== ÅÏ %d ==========", turn);
+        printf("\n========== í„´ %d ==========", turn);
         printStatus(&cat);
         updateMood(&cat);
 
-        printf("\n[»óÈ£ÀÛ¿ë]\n");
-        printf("0: ¾Æ¹«°Íµµ ¾È ÇÔ\n1: ±Ü¾î ÁÖ±â\n");
-        if (hasMouse) printf("2: Àå³­°¨ Áã·Î ³î±â\n");
-        if (hasLaser) printf("3: ·¹ÀÌÀú Æ÷ÀÎÅÍ·Î ³î±â\n");
-        printf("¼±ÅÃ: ");
+        printf("\n[ìƒí˜¸ì‘ìš©]\n");
+        printf("0: ì•„ë¬´ê²ƒë„ ì•ˆ í•¨\n1: ê¸ì–´ ì£¼ê¸°\n");
+        if (hasMouse) printf("2: ì¥ë‚œê° ì¥ë¡œ ë†€ê¸°\n");
+        if (hasLaser) printf("3: ë ˆì´ì € í¬ì¸í„°ë¡œ ë†€ê¸°\n");
+        printf("ì„ íƒ: ");
         int action;
         if (scanf_s("%d", &action) != 1) {
-            printf("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ¼ıÀÚ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.\n");
+            printf("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ìˆ«ìë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.\n");
             clearInputBuffer();
             action = 0;
         }
@@ -51,7 +50,7 @@ int main() {
 
         int gain = produceCP(&cat);
         cp += gain;
-        printf("¾òÀº CP: %d / ÇöÀç CP: %d\n", gain, cp);
+        printf("ì–»ì€ CP: %d / í˜„ì¬ CP: %d\n", gain, cp);
 
         shopMenu(&cp, &hasMouse, &hasLaser);
 
@@ -60,7 +59,7 @@ int main() {
         }
     }
 
-    printf("\n10ÅÏÀÌ Á¾·áµÇ¾ú½À´Ï´Ù. ÇÃ·¹ÀÌ °¨»çÇÕ´Ï´Ù!\n");
+    printf("\n10í„´ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. í”Œë ˆì´ ê°ì‚¬í•©ë‹ˆë‹¤!\n");
     return 0;
 }
 
@@ -69,7 +68,7 @@ void updateMood(Cat* cat) {
     int roll = rand() % 6 + 1;
     if (roll <= threshold && cat->mood > 0) {
         cat->mood--;
-        printf("±âºĞÀÌ ³ªºüÁ³½À´Ï´Ù. ÇöÀç ±âºĞ: %d\n", cat->mood);
+        printf("ê¸°ë¶„ì´ ë‚˜ë¹ ì¡ŒìŠµë‹ˆë‹¤. í˜„ì¬ ê¸°ë¶„: %d\n", cat->mood);
     }
 }
 
@@ -78,7 +77,7 @@ int produceCP(Cat* cat) {
 }
 
 void printStatus(Cat* cat) {
-    printf("\n[ÂË¶±ÀÌ »óÅÂ]\n±âºĞ: %d (0~3), Ä£¹Ğµµ: %d (0~4)\n", cat->mood, cat->affinity);
+    printf("\n[ì«€ë–¡ì´ ìƒíƒœ]\nê¸°ë¶„: %d (0~3), ì¹œë°€ë„: %d (0~4)\n", cat->mood, cat->affinity);
 }
 
 void interaction(Cat* cat, int action, int hasMouse, int hasLaser) {
@@ -87,40 +86,40 @@ void interaction(Cat* cat, int action, int hasMouse, int hasLaser) {
     case 0:
         if (cat->mood > 0) cat->mood--;
         if (roll <= 5 && cat->affinity > 0) cat->affinity--;
-        printf("¾Æ¹«°Íµµ ÇÏÁö ¾ÊÀ½: ±âºĞ -1, Ä£¹Ğµµ Á¶°ÇºÎ -1\n");
+        printf("ì•„ë¬´ê²ƒë„ í•˜ì§€ ì•ŠìŒ: ê¸°ë¶„ -1, ì¹œë°€ë„ ì¡°ê±´ë¶€ -1\n");
         break;
     case 1:
         if (roll >= 5 && cat->affinity < 4) cat->affinity++;
-        printf("±Ü¾î ÁÖ±â: Ä£¹Ğµµ Á¶°ÇºÎ +1\n");
+        printf("ê¸ì–´ ì£¼ê¸°: ì¹œë°€ë„ ì¡°ê±´ë¶€ +1\n");
         break;
     case 2:
         if (hasMouse) {
             if (cat->mood < 3) cat->mood++;
             if (roll >= 4 && cat->affinity < 4) cat->affinity++;
-            printf("Àå³­°¨ Áã·Î ³î±â: ±âºĞ +1, Ä£¹Ğµµ Á¶°ÇºÎ +1\n");
+            printf("ì¥ë‚œê° ì¥ë¡œ ë†€ê¸°: ê¸°ë¶„ +1, ì¹œë°€ë„ ì¡°ê±´ë¶€ +1\n");
         }
         break;
     case 3:
         if (hasLaser) {
             cat->mood = MIN(3, cat->mood + 2);
             if (roll >= 2 && cat->affinity < 4) cat->affinity++;
-            printf("·¹ÀÌÀú Æ÷ÀÎÅÍ·Î ³î±â: ±âºĞ +2, Ä£¹Ğµµ Á¶°ÇºÎ +1\n");
+            printf("ë ˆì´ì € í¬ì¸í„°ë¡œ ë†€ê¸°: ê¸°ë¶„ +2, ì¹œë°€ë„ ì¡°ê±´ë¶€ +1\n");
         }
         break;
     default:
-        printf("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù.\n");
+        printf("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤.\n");
     }
 }
 
 void shopMenu(int* cp, int* hasMouse, int* hasLaser) {
-    printf("\n[»óÁ¡]\n");
-    printf("0. ¾Æ¹«°Íµµ ¾È »ê´Ù\n");
-    if (!(*hasMouse)) printf("1. Àå³­°¨ Áã (1 CP)\n");
-    if (!(*hasLaser)) printf("2. ·¹ÀÌÀú Æ÷ÀÎÅÍ (2 CP)\n");
-    printf("¼±ÅÃ: ");
+    printf("\n[ìƒì ]\n");
+    printf("0. ì•„ë¬´ê²ƒë„ ì•ˆ ì‚°ë‹¤\n");
+    if (!(*hasMouse)) printf("1. ì¥ë‚œê° ì¥ (1 CP)\n");
+    if (!(*hasLaser)) printf("2. ë ˆì´ì € í¬ì¸í„° (2 CP)\n");
+    printf("ì„ íƒ: ");
     int choice;
     if (scanf_s("%d", &choice) != 1) {
-        printf("¼ıÀÚ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.\n");
+        printf("ìˆ«ìë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.\n");
         clearInputBuffer();
         choice = 0;
     }
@@ -128,30 +127,30 @@ void shopMenu(int* cp, int* hasMouse, int* hasLaser) {
     if (choice == 1 && !(*hasMouse) && *cp >= 1) {
         *hasMouse = 1;
         *cp -= 1;
-        printf("Àå³­°¨ Áã¸¦ ±¸¸ÅÇß½À´Ï´Ù.\n");
+        printf("ì¥ë‚œê° ì¥ë¥¼ êµ¬ë§¤í–ˆìŠµë‹ˆë‹¤.\n");
     }
     else if (choice == 2 && !(*hasLaser) && *cp >= 2) {
         *hasLaser = 1;
         *cp -= 2;
-        printf("·¹ÀÌÀú Æ÷ÀÎÅÍ¸¦ ±¸¸ÅÇß½À´Ï´Ù.\n");
+        printf("ë ˆì´ì € í¬ì¸í„°ë¥¼ êµ¬ë§¤í–ˆìŠµë‹ˆë‹¤.\n");
     }
     else if (choice != 0) {
-        printf("±¸¸Å ½ÇÆĞ (CP ºÎÁ· ¶Ç´Â ÀÌ¹Ì ±¸¸ÅÇÔ)\n");
+        printf("êµ¬ë§¤ ì‹¤íŒ¨ (CP ë¶€ì¡± ë˜ëŠ” ì´ë¯¸ êµ¬ë§¤í•¨)\n");
     }
 }
 
 void triggerQuest() {
     char input[100] = { 0 };
-    printf("\n[µ¹¹ß Äù½ºÆ® ¹ß»ı!]\nÂË¶±ÀÌ°¡ Ã¢¹ÛÀ¸·Î ³ª°¡·Á ÇÕ´Ï´Ù! 'µ¹¾Æ¿À°Ô ÇÏ±â'¸¦ ÀÔ·ÂÇÏ¼¼¿ä: ");
+    printf("\n[ëŒë°œ í€˜ìŠ¤íŠ¸ ë°œìƒ!]\nì«€ë–¡ì´ê°€ ì°½ë°–ìœ¼ë¡œ ë‚˜ê°€ë ¤ í•©ë‹ˆë‹¤! 'ëŒì•„ì˜¤ê²Œ í•˜ê¸°'ë¥¼ ì…ë ¥í•˜ì„¸ìš”: ");
     if (scanf_s("%99s", input, (unsigned)_countof(input)) != 1) {
-        printf("ÀÔ·Â ½ÇÆĞ - ÂË¶±ÀÌ´Â ¿ÜÃâ ÁßÀÔ´Ï´Ù.\n");
+        printf("ì…ë ¥ ì‹¤íŒ¨ - ì«€ë–¡ì´ëŠ” ì™¸ì¶œ ì¤‘ì…ë‹ˆë‹¤.\n");
         return;
     }
-    if (strcmp(input, "µ¹¾Æ¿À°Ô") == 0 || strcmp(input, "µ¹¾Æ¿À°ÔÇÏ±â") == 0) {
-        printf("ÂË¶±ÀÌ°¡ µ¹¾Æ¿Ô½À´Ï´Ù!\n");
+    if (strcmp(input, "ëŒì•„ì˜¤ê²Œ") == 0 || strcmp(input, "ëŒì•„ì˜¤ê²Œí•˜ê¸°") == 0) {
+        printf("ì«€ë–¡ì´ê°€ ëŒì•„ì™”ìŠµë‹ˆë‹¤!\n");
     }
     else {
-        printf("ÂË¶±ÀÌ´Â Àá½Ã ¿ÜÃâ ÁßÀÔ´Ï´Ù...\n");
+        printf("ì«€ë–¡ì´ëŠ” ì ì‹œ ì™¸ì¶œ ì¤‘ì…ë‹ˆë‹¤...\n");
     }
 }
 
